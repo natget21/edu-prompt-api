@@ -21,7 +21,15 @@ const Prompt = sequelize.define('Prompt', {
   isFavorite: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
-  }
+  },
+  isOnMarket: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
 }, {
   timestamps: false,  // We are manually handling the timestamp if needed
 });
