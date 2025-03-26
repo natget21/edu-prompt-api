@@ -28,7 +28,7 @@ const Prompt = sequelize.define('Prompt', {
   },
   price: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    allowNull: true,
   },
 }, {
   timestamps: false,  // We are manually handling the timestamp if needed
