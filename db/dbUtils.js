@@ -3,15 +3,21 @@ import AWS from 'aws-sdk';
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
+import { MongoDbDatabase } from './mongoDb.js';
+
 dotenv.config();
 
 let sequelizeInstance = null;
 let dynamoDb = null;
+let dbInstance = null;
 
 const connectMongoDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('MongoDB connected');
+    dbInstance = new MongoDbDatabase();
+    return dbInstance;
+
   } catch (err) {
     console.error('Error connecting to MongoDB:', err.message);
     process.exit(1);
@@ -53,8 +59,7 @@ const connectPostgres = async () => {
 const connectToDB = async (dbType = 'mongodb') => {
   switch (dbType) {
     case 'mongodb':
-      await connectMongoDB();
-      break;
+      return await connectMongoDB();
     case 'dynamodb':
       return connectDynamoDB();
     case 'postgres':

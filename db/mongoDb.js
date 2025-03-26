@@ -1,32 +1,27 @@
 import mongoose from 'mongoose';
-import { Database } from './database';
+import { Database } from './database.js';
 
 class MongoDbDatabase extends Database {
-  async create(model, item) {
-    const Model = mongoose.model(model); 
+  async create(Model, item) {
     const doc = new Model(item);
     await doc.save();
     return doc;
   }
 
-  async getById(model, id) {
-    const Model = mongoose.model(model); 
+  async getById(Model, id) {
     return await Model.findById(id);
   }
 
-  async get(model, query = {}, projection = {}, options = {}) {
-    const Model = mongoose.model(model);
+  async get(Model, query = {}, projection = {}, options = {}) {
     return await Model.find(query, projection, options);
   }
 
-  async update(model, id, item) {
-    const Model = mongoose.model(model); 
+  async update(Model, id, item) {
     return await Model.findByIdAndUpdate(id, item, { new: true });
   }
 
-  async delete(model, id) {
-    const Model = mongoose.model(model); 
-    await Model.findByIdAndDelete(id);
+  async delete(Model, id) {
+    return await Model.findByIdAndDelete(id);
   }
 }
 

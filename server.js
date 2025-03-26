@@ -35,10 +35,10 @@ app.use(rateLimit({
 
 app.use('/api/auth', authRoutes);
 app.use('/api/folders', folderRoutes);
-app.use('/api/history', historyRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/prompts', promptRoutes);
-app.use('/api/prompt-categories', promptCategoryRoutes);
+// app.use('/api/history', historyRoutes);
+// app.use('/api/messages', messageRoutes);
+// app.use('/api/prompts', promptRoutes);
+// app.use('/api/prompt-categories', promptCategoryRoutes);
 app.use('/api/ai', aiRoutes);
 
 router.get('/api/ping', (req, res) => {
