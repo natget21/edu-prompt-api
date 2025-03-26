@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelizeInstance as sequelize } from '../../db/database.js'; // Import the Sequelize instance
+import { sequelizeInstance as sequelize } from '../../db/dbUtils.js';
 
 const Folder = sequelize.define('Folder', {
   userId: {

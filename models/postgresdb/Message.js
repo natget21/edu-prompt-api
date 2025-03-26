@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelizeInstance as sequelize } from '../../db/database.js';
+import { sequelizeInstance as sequelize } from '../../db/dbUtils.js';
 
 const Message = sequelize.define('Message', {
   type: {
