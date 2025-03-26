@@ -12,7 +12,6 @@ provider:
   timeout: 10
   environment:
     NODE_ENV: production
-    MONGODB_URI: ${env:MONGODB_URI}
     AUTH0_DOMAIN: ${env:AUTH0_DOMAIN}
     AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE}
     AUTH0_API_URL: ${env:AUTH0_API_URL}
@@ -38,14 +37,11 @@ functions:
           cors: true
 
 plugins:
-  - serverless-webpack
   - serverless-offline
 
 custom:
-  webpack:
-    includeModules: true
   serverless-offline:
-    httpPort: 3000
+    httpPort: 7000
 
 resources:
   Resources:
@@ -54,6 +50,12 @@ resources:
       Properties:
         Name: "express-api"
         Description: "API for the Express app"
+    ApiGatewayDeployment:
+      Type: AWS::ApiGateway::Deployment
+      DependsOn: ApiGatewayRestApi
+      Properties:
+        RestApiId: !Ref ApiGatewayRestApi
+        StageName: !Ref ApiGatewayStage
     ApiGatewayStage:
       Type: AWS::ApiGateway::Stage
       Properties:
