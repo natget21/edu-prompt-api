@@ -1,5 +1,5 @@
 import { initializeDB } from '../db/dbSelector.js';
-import { History } from '../models/mongodb/Folder.js';
+import { History } from '../models/mongodb/History.js';
 
 const collectionName = History
 
