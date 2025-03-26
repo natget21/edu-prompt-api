@@ -20,7 +20,7 @@ export const getMessages = async (req, res) => {
 };
 
 export const createMessage = async (req, res) => {
-  const newMessage = db.create(collectionName, req.body);
+  const newMessage = await db.create(collectionName, req.body);
   res.status(201).json(newMessage);
 };
 

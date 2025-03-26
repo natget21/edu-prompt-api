@@ -20,7 +20,7 @@ export const getPrompts = async (req, res) => {
 };
 
 export const createPrompt = async (req, res) => {
-  const newPrompt = db.create(collectionName, req.body);
+  const newPrompt = await db.create(collectionName, req.body);
   res.status(201).json(newPrompt);
 };
 

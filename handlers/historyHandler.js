@@ -20,7 +20,7 @@ export const getHistory = async (req, res) => {
 };
 
 export const createHistory = async (req, res) => {
-  const newHistory = db.create(collectionName, req.body);
+  const newHistory = await db.create(collectionName, req.body);
   res.status(201).json(newHistory);
 };
 

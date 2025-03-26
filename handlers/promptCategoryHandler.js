@@ -20,7 +20,7 @@ export const getPromptCategories = async (req, res) => {
 };
 
 export const createPromptCategory = async (req, res) => {
-  const newCategory = db.create(collectionName, req.body);
+  const newCategory = await db.create(collectionName, req.body);
   res.status(201).json(newCategory);
 };
 

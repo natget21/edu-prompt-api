@@ -19,12 +19,12 @@ export const getFolders = async (req, res) => {
 };
 
 export const createFolder = async (req, res) => {
-  const response = db.create(collectionName, req.body);
+  const response = await db.create(collectionName, req.body);
   res.status(201).json(response);
 };
 
 export const updateFolder = async (req, res) => {
-  const response = db.update(collectionName, req.params.id, req.body);
+  const response = await db.update(collectionName, req.params.id, req.body);
   res.json(response);
 };
 
