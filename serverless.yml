@@ -1,0 +1,70 @@
+org: natget21
+app: eduprompt-api
+service: eduprompt-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  profile: test
+  stage: dev
+  memorySize: 512
+  timeout: 10
+  environment:
+    NODE_ENV: production
+    MONGODB_URI: ${env:MONGODB_URI}
+    AUTH0_DOMAIN: ${env:AUTH0_DOMAIN}
+    AUTH0_AUDIENCE: ${env:AUTH0_AUDIENCE}
+    AUTH0_API_URL: ${env:AUTH0_API_URL}
+    AUTH0_CLIENT_ID: ${env:AUTH0_CLIENT_ID}
+    AUTH0_CLIENT_SECRET: ${env:AUTH0_CLIENT_SECRET}
+    GEMINI_API_KEY: ${env:GEMINI_API_KEY}
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY}
+    DB_TYPE: ${env:DB_TYPE}
+    MONGODB_URI: ${env:MONGODB_URI}
+    AWS_REGION: ${env:AWS_REGION}
+    POSTGRES_DB: ${env:POSTGRES_DB}
+    POSTGRES_USER: ${env:POSTGRES_USER}
+    POSTGRES_PASSWORD: ${env:POSTGRES_PASSWORD}
+    POSTGRES_HOST: ${env:POSTGRES_HOST}
+
+functions:
+  api:
+    handler: handler.api
+    events:
+      - http:
+          path: /{proxy+}
+          method: any
+          cors: true
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+custom:
+  webpack:
+    includeModules: true
+  serverless-offline:
+    httpPort: 3000
+
+resources:
+  Resources:
+    ApiGatewayRestApi:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: "express-api"
+        Description: "API for the Express app"
+    ApiGatewayStage:
+      Type: AWS::ApiGateway::Stage
+      Properties:
+        StageName: "prod"
+        Description: "Production stage"
+        RestApiId: !Ref ApiGatewayRestApi
+        DeploymentId: !Ref ApiGatewayDeployment
+
+iamRoleStatements:
+  - Effect: "Allow"
+    Action:
+      - "dynamodb:Query"
+      - "dynamodb:Scan"
+    Resource: "*"

@@ -1,0 +1,93 @@
+import mongoose from 'mongoose';
+import AWS from 'aws-sdk';
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+let sequelizeInstance = null;
+let dynamoDb = null;
+
+const connectMongoDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('MongoDB connected');
+  } catch (err) {
+    console.error('Error connecting to MongoDB:', err.message);
+    process.exit(1);
+  }
+};
+
+const connectDynamoDB = () => {
+  AWS.config.update({
+    region: process.env.AWS_REGION,
+  });
+  dynamoDb = new AWS.DynamoDB.DocumentClient();
+  console.log('DynamoDB connected');
+  return dynamoDb;
+};
+
+const connectPostgres = async () => {
+  sequelizeInstance = new Sequelize(
+    process.env.POSTGRES_DB,
+    process.env.POSTGRES_USER,
+    process.env.POSTGRES_PASSWORD,
+    {
+      host: process.env.POSTGRES_HOST,
+      dialect: 'postgres',
+      logging: false,
+    }
+  );
+
+  try {
+    await sequelizeInstance.authenticate();
+    console.log('PostgreSQL connected');
+  } catch (err) {
+    console.error('Error connecting to PostgreSQL:', err.message);
+    process.exit(1);
+  }
+
+  return sequelizeInstance;
+};
+
+const connectToDB = async (dbType = 'mongodb') => {
+  switch (dbType) {
+    case 'mongodb':
+      await connectMongoDB();
+      break;
+    case 'dynamodb':
+      return connectDynamoDB();
+    case 'postgres':
+      return await connectPostgres();
+    default:
+      console.error('Unsupported database type');
+      process.exit(1);
+  }
+};
+
+const gracefulShutdown = async (dbType) => {
+  console.log(`Shutting down database connection: ${dbType}`);
+  
+  try {
+    if (dbType === 'mongodb' && mongoose.connection.readyState) {
+      await mongoose.connection.close();
+      console.log('MongoDB connection closed');
+    } 
+    else if (dbType === 'postgres' && sequelizeInstance) {
+      await sequelizeInstance.close();
+      console.log('PostgreSQL connection closed');
+    } 
+    else if (dbType === 'dynamodb') {
+      console.log('DynamoDB does not require explicit shutdown');
+    } 
+    else {
+      console.warn('Unknown database type or connection not established.');
+    }
+  } catch (err) {
+    console.error(`Error during shutdown: ${err.message}`);
+  } finally {
+    process.exit(0);
+  }
+};
+
+export { connectToDB, gracefulShutdown,sequelizeInstance,dynamoDb  };
