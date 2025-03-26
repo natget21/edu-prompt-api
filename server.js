@@ -14,6 +14,7 @@ import aiRoutes from './routes/aiRoutes.js';
 import orderRoutes from './routes/ordersRoutes.js';
 
 import { errorHandler } from './middleware/errorHandler.js';
+import { dbMiddleware } from "./middleware/dbMiddleware.js";
 
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -34,13 +35,13 @@ app.use(rateLimit({
   message: 'Too many requests, please try again later',
 }));
 
-
+app.use(dbMiddleware);
 app.use('/api/auth', authRoutes);
 app.use('/api/folders', folderRoutes);
-// app.use('/api/history', historyRoutes);
-// app.use('/api/messages', messageRoutes);
-// app.use('/api/prompts', promptRoutes);
-// app.use('/api/prompt-categories', promptCategoryRoutes);
+app.use('/api/history', historyRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/prompts', promptRoutes);
+app.use('/api/prompt-categories', promptCategoryRoutes);
 app.use('/api/ai', aiRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/orders", orderRoutes);

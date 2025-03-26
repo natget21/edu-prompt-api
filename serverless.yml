@@ -21,7 +21,6 @@ provider:
     GEMINI_API_KEY: ${env:GEMINI_API_KEY}
     OPENAI_API_KEY: ${env:OPENAI_API_KEY}
     DB_TYPE: ${env:DB_TYPE}
-    MONGODB_URI: ${env:MONGODB_URI}
     AWS_REGION: ${env:AWS_REGION}
     POSTGRES_DB: ${env:POSTGRES_DB}
     POSTGRES_USER: ${env:POSTGRES_USER}
@@ -30,7 +29,7 @@ provider:
 
 functions:
   api:
-    handler: handler.api
+    handler: handler.handler
     events:
       - http:
           path: /{proxy+}
@@ -38,7 +37,6 @@ functions:
           cors: true
 
 plugins:
-  - serverless-webpack
   - serverless-offline
 
 custom:

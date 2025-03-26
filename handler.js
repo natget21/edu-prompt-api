@@ -15,6 +15,7 @@ import productsRoutes from "./routes/productsRoutes.js";
 import orderRoutes from "./routes/ordersRoutes.js";
 
 import { errorHandler } from "./middleware/errorHandler.js";
+import { dbMiddleware } from "./middleware/dbMiddleware.js";
 
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
@@ -22,6 +23,7 @@ import rateLimit from "express-rate-limit";
 dotenv.config();
 
 const app = express();
+const router = express.Router();
 
 app.use(express.json());
 app.use(helmet());
@@ -32,6 +34,7 @@ app.use(
     message: "Too many requests, please try again later",
   })
 );
+app.use(dbMiddleware);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/folders", folderRoutes);

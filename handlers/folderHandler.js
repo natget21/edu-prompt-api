@@ -1,20 +1,14 @@
-import { initializeDB } from '../db/dbSelector.js';
 import { Folder } from '../models/mongodb/Folder.js';
 
 const collectionName = Folder
 
-let db;
-(async () => {
-  db = await initializeDB();
-})();
-
 export const getFolderById = async (req, res) => {
-  const response = await db.getById(collectionName, req.params.id);
+  const response = await req.db.getById(collectionName, req.params.id);
   res.json(response);
 };
 
 export const getFolders = async (req, res) => {
-  const response = await db.get(collectionName);
+  const response = await req.db.get(collectionName);
   res.json(response);
 };
 
