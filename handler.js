@@ -20,6 +20,7 @@ import rateLimit from "express-rate-limit";
 dotenv.config();
 
 const app = express();
+const router = express.Router();
 
 app.use(express.json());
 app.use(helmet());
@@ -54,7 +55,7 @@ initializeDB()
     process.exit(1);
   });
 
-export const handler = serverless(app);
+export const api = serverless(app);
 
 const handleShutdown = async (signal) => {
   console.log(`Received ${signal}. Closing server...`);

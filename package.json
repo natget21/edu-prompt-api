@@ -25,6 +25,7 @@
     "sequelize": "^6.37.6",
     "serverless-http": "^3.2.0",
     "serverless-webpack": "^5.15.1",
+    "uuid": "^11.1.0",
     "webpack": "^5.98.0"
   },
   "devDependencies": {
