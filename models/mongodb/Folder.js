@@ -6,4 +6,9 @@ const FolderSchema = new mongoose.Schema({
   editable: { type: Boolean, default: true }
 });
 
+FolderSchema.set('toJSON', {
+  // virtuals: true,
+  versionKey: false
+});
+
 export const Folder = mongoose.model('Folder', FolderSchema);

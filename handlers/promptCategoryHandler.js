@@ -10,12 +10,14 @@ let db;
 
 
 export const getPromptCategoryById = async (req, res) => {
-  const category = await db.getById(collectionName, req.params.id);
+  const populate = { path: '_prompts', select: '_id title description' };
+  const category = await db.getById(collectionName, req.params.id,populate);
   res.json(category);
 };
 
 export const getPromptCategories = async (req, res) => {
-  const categories = await db.get(collectionName).populate('promptIds');
+  const populate = { path: '_prompts', select: '_id title description' };
+  const categories = await db.get(collectionName,{},{},{},populate);
   res.json(categories);
 };
 

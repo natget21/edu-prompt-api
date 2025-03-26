@@ -12,4 +12,17 @@ const PromptCategorySchema = new mongoose.Schema({
   promptIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Prompt' }]
 });
 
+
+PromptCategorySchema.virtual('_prompts', {
+  ref: 'Prompt', 
+  localField: 'promptIds',
+  foreignField: '_id',
+  justOne: false 
+});
+
+PromptCategorySchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false
+});
+
 export const PromptCategory = mongoose.model('PromptCategory', PromptCategorySchema);

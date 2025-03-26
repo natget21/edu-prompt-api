@@ -11,6 +11,11 @@ const PromptSchema = new mongoose.Schema({
     },
     isFavorite: { type: Boolean, default: false }
   });
+
+  PromptSchema.set('toJSON', {
+    // virtuals: true,
+    versionKey: false
+  });
   
   export const Prompt = mongoose.model('Prompt', PromptSchema);
   
