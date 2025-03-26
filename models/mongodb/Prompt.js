@@ -11,7 +11,7 @@ const PromptSchema = new mongoose.Schema({
     },
     isFavorite: { type: Boolean, default: false },
     isOnMarket: { type: Boolean, default: false },
-    price : { type: Number, required: true }
+    price : { type: Number, required: false }
   });
 
   PromptSchema.set('toJSON', {
