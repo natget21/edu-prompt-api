@@ -8,7 +8,7 @@ class Database {
     }
 
     async get(model,query = {}, projection = {}, options = {}) {
-        throw new Error("Method 'getById()' must be implemented.");
+        throw new Error("Method 'get()' must be implemented.");
       }
   
     async update(model, id, item) {

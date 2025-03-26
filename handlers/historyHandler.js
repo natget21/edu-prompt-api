@@ -1,6 +1,6 @@
 import { Database } from '../db/database.js';
 
-const { create, getById, get, update, remove } = new Database();
+const { create, getById, get, update, delete } = new Database();
 const collectionName = "History"
 
 export const getHistoryById = async (req, res) => {
@@ -24,6 +24,6 @@ export const updateHistory = async (req, res) => {
 };
 
 export const deleteHistory = async (req, res) => {
-  const response = await remove(collectionName, req.params.id);
+  const response = await delete(collectionName, req.params.id);
   res.status(204).send(response);
 };

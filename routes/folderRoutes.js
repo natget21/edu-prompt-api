@@ -3,7 +3,7 @@ import { getFolderById,getFolders,createFolder,updateFolder,deleteFolder } from 
 
 const router = express.Router();
 
-router.get('/:id', getFolderById);
+// router.get('/:id', getFolderById);
 router.get('/', getFolders);
 router.post('/', createFolder);
 router.put('/:id', updateFolder);
