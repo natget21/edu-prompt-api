@@ -9,7 +9,9 @@ const PromptSchema = new mongoose.Schema({
       En: { type: String, required: true },
       It: { type: String, required: true }
     },
-    isFavorite: { type: Boolean, default: false }
+    isFavorite: { type: Boolean, default: false },
+    isOnMarket: { type: Boolean, default: false },
+    price : { type: Number, required: true }
   });
 
   PromptSchema.set('toJSON', {

@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelizeInstance as sequelize } from '../../db/database.js';
+import { sequelizeInstance as sequelize } from '../../db/dbUtils.js';
 
 const Prompt = sequelize.define('Prompt', {
   titleEn: {
@@ -21,7 +21,15 @@ const Prompt = sequelize.define('Prompt', {
   isFavorite: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,
-  }
+  },
+  isOnMarket: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
 }, {
   timestamps: false,  // We are manually handling the timestamp if needed
 });

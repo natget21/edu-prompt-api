@@ -11,8 +11,11 @@ import messageRoutes from "./routes/messageRoutes.js";
 import promptRoutes from "./routes/promptRoutes.js";
 import promptCategoryRoutes from "./routes/promptCategoryRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import productsRoutes from "./routes/productsRoutes.js";
+import orderRoutes from "./routes/ordersRoutes.js";
 
 import { errorHandler } from "./middleware/errorHandler.js";
+import { dbMiddleware } from "./middleware/dbMiddleware.js";
 
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
@@ -31,6 +34,7 @@ app.use(
     message: "Too many requests, please try again later",
   })
 );
+app.use(dbMiddleware);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/folders", folderRoutes);
@@ -39,11 +43,13 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/prompts", promptRoutes);
 app.use("/api/prompt-categories", promptCategoryRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/products", productsRoutes);
+app.use("/api/orders", orderRoutes);
 
 router.get('/api/ping', (req, res) => {
-    res.status(200).json({ message: 'OK!' });
+  res.status(200).json({ message: 'OK!' });
 });
-  
+
 app.use(router);
 
 app.use(errorHandler);

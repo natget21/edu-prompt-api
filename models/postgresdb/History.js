@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelizeInstance as sequelize } from '../../db/database.js';
+import { sequelizeInstance as sequelize } from '../../db/dbUtils.js';
 
 import { Folder } from './Folder.js';  // Assuming the Folder model exists in models/postgresql/Folder.js
 import { Message } from './Message.js';  // Assuming the Message model exists in models/postgresql/Message.js
