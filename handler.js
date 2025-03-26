@@ -11,6 +11,7 @@ import messageRoutes from "./routes/messageRoutes.js";
 import promptRoutes from "./routes/promptRoutes.js";
 import promptCategoryRoutes from "./routes/promptCategoryRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import savedMessagesRoutes from "./routes/savedMessagesRoutes.js";
 
 import { errorHandler } from "./middleware/errorHandler.js";
 
@@ -38,6 +39,7 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/prompts", promptRoutes);
 app.use("/api/prompt-categories", promptCategoryRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/saved-messages", savedMessagesRoutes);
 
 router.get('/api/ping', (req, res) => {
     res.status(200).json({ message: 'OK!' });

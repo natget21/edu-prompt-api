@@ -9,11 +9,12 @@ import historyRoutes from './routes/historyRoutes.js';
 import messageRoutes from './routes/messageRoutes.js';
 import promptRoutes from './routes/promptRoutes.js';
 import promptCategoryRoutes from './routes/promptCategoryRoutes.js';
+import savedMessagesRoutes from "./routes/savedMessagesRoutes.js";
 import aiRoutes from './routes/aiRoutes.js';
 
-import { errorHandler } from './middleware/errorHandler.js'; 
+import { errorHandler } from './middleware/errorHandler.js';
 
-import helmet from 'helmet'; 
+import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 
 dotenv.config();
@@ -25,7 +26,7 @@ const router = express.Router();
 
 app.use(express.json());
 // app.use(authMiddleware);
-app.use(helmet()); 
+app.use(helmet());
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100, // Limit each IP to 100 requests per window
@@ -40,6 +41,7 @@ app.use('/api/folders', folderRoutes);
 // app.use('/api/prompts', promptRoutes);
 // app.use('/api/prompt-categories', promptCategoryRoutes);
 app.use('/api/ai', aiRoutes);
+app.use("/api/saved-messages", savedMessagesRoutes);
 
 router.get('/api/ping', (req, res) => {
   res.status(200).json({ message: 'OK!' });
@@ -61,15 +63,15 @@ initializeDB()
   });
 
 const handleShutdown = async (signal) => {
-    console.log(`Received ${signal}. Closing server...`);
-    if (server) {
-      server.close(() => {
-        console.log('Express server closed.');
-      });
-    }
-    await shutdownDB();
-    process.exit(0);
-  };
-  
-  process.on('SIGINT', () => handleShutdown('SIGINT')); 
-  process.on('SIGTERM', () => handleShutdown('SIGTERM'));
+  console.log(`Received ${signal}. Closing server...`);
+  if (server) {
+    server.close(() => {
+      console.log('Express server closed.');
+    });
+  }
+  await shutdownDB();
+  process.exit(0);
+};
+
+process.on('SIGINT', () => handleShutdown('SIGINT'));
+process.on('SIGTERM', () => handleShutdown('SIGTERM'));
