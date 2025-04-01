@@ -26,7 +26,7 @@ const connectMongoDB = async () => {
 
 const connectDynamoDB = () => {
   AWS.config.update({
-    region: process.env.AWS_REGION,
+    region: process.env.DYNAMODB_REGION,
   });
   dynamoDb = new AWS.DynamoDB.DocumentClient();
   console.log('DynamoDB connected');

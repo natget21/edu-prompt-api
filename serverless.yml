@@ -21,7 +21,7 @@ provider:
     OPENAI_API_KEY: ${env:OPENAI_API_KEY}
     DB_TYPE: ${env:DB_TYPE}
     MONGODB_URI: ${env:MONGODB_URI}
-    AWS_REGION: ${env:AWS_REGION}
+    DYNAMODB_REGION: ${env:DYNAMODB_REGION}
     POSTGRES_DB: ${env:POSTGRES_DB}
     POSTGRES_USER: ${env:POSTGRES_USER}
     POSTGRES_PASSWORD: ${env:POSTGRES_PASSWORD}
@@ -43,26 +43,6 @@ custom:
   serverless-offline:
     httpPort: 7000
 
-resources:
-  Resources:
-    ApiGatewayRestApi:
-      Type: AWS::ApiGateway::RestApi
-      Properties:
-        Name: "express-api"
-        Description: "API for the Express app"
-    ApiGatewayDeployment:
-      Type: AWS::ApiGateway::Deployment
-      DependsOn: ApiGatewayRestApi
-      Properties:
-        RestApiId: !Ref ApiGatewayRestApi
-        StageName: !Ref ApiGatewayStage
-    ApiGatewayStage:
-      Type: AWS::ApiGateway::Stage
-      Properties:
-        StageName: "prod"
-        Description: "Production stage"
-        RestApiId: !Ref ApiGatewayRestApi
-        DeploymentId: !Ref ApiGatewayDeployment
 
 iamRoleStatements:
   - Effect: "Allow"
