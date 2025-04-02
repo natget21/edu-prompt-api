@@ -16,16 +16,8 @@ const OrdersSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'completed','canceled'],
         default: 'pending',
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now,
-    },
+    }
 
-});
+}, { timestamps: true });
 
 export const Orders = mongoose.model('Orders', OrdersSchema);

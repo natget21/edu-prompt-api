@@ -10,7 +10,7 @@ const PromptCategorySchema = new mongoose.Schema({
     It: { type: String, required: true }
   },
   promptIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Prompt' }]
-});
+}, { timestamps: true });
 
 
 PromptCategorySchema.virtual('_prompts', {

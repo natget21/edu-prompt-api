@@ -12,7 +12,7 @@ const PromptSchema = new mongoose.Schema({
     isFavorite: { type: Boolean, default: false },
     isOnMarket: { type: Boolean, default: false },
     price : { type: Number, required: false }
-  });
+  }, { timestamps: true });
 
   PromptSchema.set('toJSON', {
     // virtuals: true,

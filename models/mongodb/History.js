@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 
 const HistorySchema = new mongoose.Schema({
     userId: { type: String, required: true },
-    folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', required: true },
+    folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder', required: false, default: null },
     title: { type: String, required: true },
-    messageIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }]
-  });
+    // messageIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
+  }, { timestamps: true });
 
   HistorySchema.virtual('_folder', {
     ref: 'Folder', 
@@ -14,12 +14,12 @@ const HistorySchema = new mongoose.Schema({
     justOne: true 
   });
 
-  HistorySchema.virtual('_messages', {
-    ref: 'Message', 
-    localField: 'messageIds',
-    foreignField: '_id',
-    justOne: false 
-  });
+  // HistorySchema.virtual('_messages', {
+  //   ref: 'Message', 
+  //   localField: 'messageIds',
+  //   foreignField: '_id',
+  //   justOne: false 
+  // });
 
   HistorySchema.set('toJSON', {
     virtuals: true,
