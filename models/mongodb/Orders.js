@@ -6,7 +6,7 @@ const OrdersSchema = new mongoose.Schema({
         required: true,
     },
     items: [{
-        type: String
+        type: mongoose.Schema.Types.ObjectId
     }],
     totalAmount: {
         type: Number,
@@ -26,8 +26,6 @@ const OrdersSchema = new mongoose.Schema({
         default: Date.now,
     },
 
-},
-    { versionKey: false }
+}, { versionKey: false }
 );
-
 export const Orders = mongoose.model('Orders', OrdersSchema);
