@@ -4,19 +4,20 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const tokenAuth = (req, res, next) => {
-  auth({
-    audience: process.env.AUTH0_AUDIENCE,
-    issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}/`,
-    tokenSigningAlg: "RS256",
-  })(req, res, (err) => {
-    if (err) {
-      return res.status(401).json({
-        message: "Unauthorized: Invalid or missing token",
-        error: err.message,
-      });
-    }
-    next();
-  });
+  next();
+  // auth({
+  //   audience: process.env.AUTH0_AUDIENCE,
+  //   issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}/`,
+  //   tokenSigningAlg: "RS256",
+  // })(req, res, (err) => {
+  //   if (err) {
+  //     return res.status(401).json({
+  //       message: "Unauthorized: Invalid or missing token",
+  //       error: err.message,
+  //     });
+  //   }
+  //   next();
+  // });
 };
 
 const scopeAuth = (scope) => (req, res, next) => {
