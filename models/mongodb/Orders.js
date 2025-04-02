@@ -6,7 +6,7 @@ const OrdersSchema = new mongoose.Schema({
         required: true,
     },
     items: [{
-        type: String
+        type: mongoose.Schema.Types.ObjectId
     }],
     totalAmount: {
         type: Number,
@@ -14,10 +14,10 @@ const OrdersSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'completed','canceled'],
+        enum: ['pending', 'completed', 'canceled'],
         default: 'pending',
     }
 
-}, { timestamps: true });
+}, { timestamps: true,versionKey: false });
 
 export const Orders = mongoose.model('Orders', OrdersSchema);
