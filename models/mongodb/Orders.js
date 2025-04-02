@@ -14,7 +14,7 @@ const OrdersSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'completed','canceled'],
+        enum: ['pending', 'completed', 'canceled'],
         default: 'pending',
     },
     createdAt: {
@@ -26,6 +26,8 @@ const OrdersSchema = new mongoose.Schema({
         default: Date.now,
     },
 
-});
+},
+    { versionKey: false }
+);
 
 export const Orders = mongoose.model('Orders', OrdersSchema);
