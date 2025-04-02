@@ -8,16 +8,19 @@ const collectionName = Orders
 
 export const getOrderById = async (req, res) => {
     try {
-        const order = await Orders.findById(req.params.id).lean(); // Fetch raw JSON object
+        const order = await getDBInstance().getById(collectionName, req.params.id);
 
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        const productItems = await Products.find({ _id: { $in: order.items } });
-        const promptItems = await Prompt.find({ _id: { $in: order.items } });
+        const productItems = order.items.filter(item => item.type === 'product').map(item => item._id);
+        const promptItems = order.items.filter(item => item.type === 'prompt').map(item => item._id);
 
-        order._items = [...productItems, ...promptItems];
+        const populatedProducts = await getDBInstance().get(Products, { _id: { $in: productItems } });
+        const populatedPrompts = await getDBInstance().get(Prompt, { _id: { $in: promptItems } });
+
+        order._items = [...populatedProducts, ...populatedPrompts];
 
         res.json(order);
     } catch (error) {
@@ -28,15 +31,17 @@ export const getOrderById = async (req, res) => {
 
 export const getOrders = async (req, res) => {
     try {
-        const orders = await Orders.find().lean();
+        const orders = await getDBInstance().get(collectionName);
 
         for (let order of orders) {
-            const productItems = await Products.find({ _id: { $in: order.items } });
-            const promptItems = await Prompt.find({ _id: { $in: order.items } });
+            const productItems = order.items.filter(item => item.type === 'product').map(item => item._id);
+            const promptItems = order.items.filter(item => item.type === 'prompt').map(item => item._id);
 
-            order._items = [...productItems, ...promptItems];
+            const populatedProducts = await getDBInstance().get(Products, { _id: { $in: productItems } });
+            const populatedPrompts = await getDBInstance().get(Prompt, { _id: { $in: promptItems } });
+            order._items = [...populatedProducts, ...populatedPrompts];
+
         }
-
         res.json(orders);
     } catch (error) {
         console.error(error);
