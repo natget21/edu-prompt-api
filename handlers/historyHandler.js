@@ -1,35 +1,46 @@
-import { initializeDB } from '../db/dbSelector.js';
+import { getDBInstance } from '../db/dbSelector.js';
 import { History } from '../models/mongodb/History.js';
+import { Message } from '../models/mongodb/Message.js';
 
 const collectionName = History
 
-let db;
-(async () => {
-  db = await initializeDB();
-})();
-
 
 export const getHistoryById = async (req, res) => {
-  const history = await db.getById(collectionName, req.params.id).populate('folderId messages');
+  const populate = [{ path: '_folder'}];
+  const history = await getDBInstance().getById(collectionName, req.params.id,populate);
   res.json(history);
 };
 
-export const getHistory = async (req, res) => {
-  const history = await await db.get(collectionName).populate('folderId messages');
+export const getAllHistory = async (req, res) => {
+  const populate = [{ path: '_folder'}];
+  const history = await getDBInstance().get(collectionName,{},{},{},populate);
   res.json(history);
 };
+
+
+export const getHistoryDetailById = async (req, res) => {
+  
+  const populate = [{ path: '_folder'}];
+  const history = await getDBInstance().getById(collectionName, req.params.id,populate);
+  const messages = await getDBInstance().get(Message,{"historyId":req.params.id});
+
+  var historyObj = history.toObject();  
+  historyObj.messages = messages;
+  res.json(historyObj);
+};
+
 
 export const createHistory = async (req, res) => {
-  const newHistory = await db.create(collectionName, req.body);
+  const newHistory = await getDBInstance().create(collectionName, req.body);
   res.status(201).json(newHistory);
 };
 
 export const updateHistory = async (req, res) => {
-  const history = await db.update(collectionName, req.params.id, req.body);
+  const history = await getDBInstance().update(collectionName, req.params.id, req.body);
   res.json(history);
 };
 
 export const deleteHistory = async (req, res) => {
-  const response = await db.delete(collectionName, req.params.id);
+  const response = await getDBInstance().delete(collectionName, req.params.id);
   res.status(204).send(response);
 };

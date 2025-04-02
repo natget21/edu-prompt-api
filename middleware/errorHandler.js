@@ -9,6 +9,13 @@ export const errorHandler = (err, req, res, next) => {
     if (err.name === 'MongoError' && err.code === 11000) {
       return res.status(409).json({ message: 'Duplicate key error', details: err.keyValue });
     }
+
+    if (err.name === "CastError") {
+      return res.status(400).json({
+          message: "Invalid ID format",
+          details: err.value
+      });
+  }
   
     res.status(500).json({
       message: 'Internal Server Error',

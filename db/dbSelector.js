@@ -9,8 +9,10 @@ let dbInstance = null;
 
 const initializeDB = async () => {
   try {
-    dbInstance = await connectToDB(DB_TYPE);
-    console.log(`Database initialized: ${DB_TYPE}`);
+    if (dbInstance == null) {
+      dbInstance = await connectToDB(DB_TYPE);
+      console.log(`Database initialized: ${DB_TYPE}`);
+    }
     return dbInstance;
   } catch (error) {
     console.error('Error initializing database:', error);
@@ -18,10 +20,17 @@ const initializeDB = async () => {
   }
 };
 
+const getDBInstance = () => {
+  if (!dbInstance) {
+    throw new Error("Database not initialized. Call initializeDB() first.");
+  }
+  return dbInstance;
+};
+
 const shutdownDB = async () => {
   console.log('Shutting down database connection...');
   await gracefulShutdown(DB_TYPE);
 };
 
-export { initializeDB, shutdownDB, DB_TYPE };
+export { initializeDB,getDBInstance, shutdownDB, DB_TYPE };
 

@@ -102,3 +102,39 @@ export const updateUserData = async (req, res) => {
 };
 
 
+
+
+export const hostedLogin = async (req, res) => {
+  const REDIRECT_URI = 'http://localhost:3000';
+  const authUrl = `https://${process.env.AUTH0_DOMAIN}/authorize?client_id=${process.env.AUTH0_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=openid profile email`;
+  res.redirect(authUrl);
+}
+
+export const getToken = async (req, res) => {
+  const REDIRECT_URI = 'http://localhost:3000';
+  var code = req.body.code;
+
+  try {
+    const tokenResponse = await axios.post(
+      `https://${process.env.AUTH0_DOMAIN}/oauth/token`,
+      {
+        client_id: process.env.AUTH0_CLIENT_ID,
+        client_secret: process.env.AUTH0_CLIENT_SECRET,
+        code: code,
+        redirect_uri: REDIRECT_URI,
+        grant_type: 'authorization_code'
+      }
+    );
+
+    res.json(tokenResponse.data);
+  } catch (error) {
+    res.status(400).json({ error: error.response?.data || 'Token exchange failed' });
+  }
+}
+
+export const logout = async (req, res) => {
+  const REDIRECT_URI = 'http://localhost:3000';
+  const logoutUrl = `https://${process.env.AUTH0_DOMAIN}/v2/logout?client_id=${process.env.AUTH0_CLIENT_ID}&returnTo=${REDIRECT_URI}`;
+
+  res.redirect(logoutUrl);
+};

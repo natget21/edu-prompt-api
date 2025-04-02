@@ -13,6 +13,7 @@ import productsRoutes from "./routes/productsRoutes.js";
 import aiRoutes from './routes/aiRoutes.js';
 import orderRoutes from './routes/ordersRoutes.js';
 
+import {tokenAuth,scopeAuth} from './middleware/auth.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 import helmet from 'helmet';
@@ -26,7 +27,7 @@ const app = express();
 const router = express.Router();
 
 app.use(express.json());
-// app.use(authMiddleware);
+
 app.use(helmet());
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -35,20 +36,26 @@ app.use(rateLimit({
 }));
 
 app.use('/api/auth', authRoutes);
-app.use('/api/folders', folderRoutes);
-app.use('/api/history', historyRoutes);
-app.use('/api/messages', messageRoutes);
-app.use('/api/prompts', promptRoutes);
-app.use('/api/prompt-categories', promptCategoryRoutes);
-app.use('/api/ai', aiRoutes);
-app.use("/api/products", productsRoutes);
-app.use("/api/orders", orderRoutes);
+app.use('/api/folders', tokenAuth, folderRoutes);
+app.use('/api/history',  tokenAuth, historyRoutes);
+app.use('/api/messages', tokenAuth, messageRoutes);
+app.use('/api/prompts', tokenAuth, promptRoutes);
+app.use('/api/prompt-categories', tokenAuth, promptCategoryRoutes);
+app.use('/api/ai', tokenAuth, aiRoutes);
+app.use("/api/products", tokenAuth, productsRoutes);
+app.use("/api/orders", tokenAuth, orderRoutes);
 
 router.get('/api/ping', (req, res) => {
   res.status(200).json({ message: 'OK!' });
 });
 
 app.use(router);
+
+app.use((req, res, next) => {
+  res.status(404).json({
+      message: "Resource not found",
+  });
+});
 
 app.use(errorHandler);
 

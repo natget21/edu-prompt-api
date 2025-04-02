@@ -13,11 +13,14 @@ let dbInstance = null;
 
 const connectMongoDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('MongoDB connected');
-    dbInstance = new MongoDbDatabase();
-    return dbInstance;
-
+    if(dbInstance){
+      return dbInstance
+    }else{
+      await mongoose.connect(process.env.MONGODB_URI);
+      console.log('MongoDB connected');
+      dbInstance = new MongoDbDatabase();
+      return dbInstance;
+    }
   } catch (err) {
     console.error('Error connecting to MongoDB:', err.message);
     process.exit(1);
@@ -25,35 +28,43 @@ const connectMongoDB = async () => {
 };
 
 const connectDynamoDB = () => {
-  AWS.config.update({
-    region: process.env.DYNAMODB_REGION,
-  });
-  dynamoDb = new AWS.DynamoDB.DocumentClient();
-  console.log('DynamoDB connected');
-  return dynamoDb;
+  if(dynamoDb){
+    return dynamoDb
+  }else{
+    AWS.config.update({
+      region: process.env.DYNAMODB_REGION,
+    });
+    dynamoDb = new AWS.DynamoDB.DocumentClient();
+    console.log('DynamoDB connected');
+    return dynamoDb;
+  }
 };
 
 const connectPostgres = async () => {
-  sequelizeInstance = new Sequelize(
-    process.env.POSTGRES_DB,
-    process.env.POSTGRES_USER,
-    process.env.POSTGRES_PASSWORD,
-    {
-      host: process.env.POSTGRES_HOST,
-      dialect: 'postgres',
-      logging: false,
+  if(sequelizeInstance){
+    return sequelizeInstance
+  }else{
+    sequelizeInstance = new Sequelize(
+      process.env.POSTGRES_DB,
+      process.env.POSTGRES_USER,
+      process.env.POSTGRES_PASSWORD,
+      {
+        host: process.env.POSTGRES_HOST,
+        dialect: 'postgres',
+        logging: false,
+      }
+    );
+  
+    try {
+      await sequelizeInstance.authenticate();
+      console.log('PostgreSQL connected');
+    } catch (err) {
+      console.error('Error connecting to PostgreSQL:', err.message);
+      process.exit(1);
     }
-  );
-
-  try {
-    await sequelizeInstance.authenticate();
-    console.log('PostgreSQL connected');
-  } catch (err) {
-    console.error('Error connecting to PostgreSQL:', err.message);
-    process.exit(1);
+  
+    return sequelizeInstance;
   }
-
-  return sequelizeInstance;
 };
 
 const connectToDB = async (dbType = 'mongodb') => {
