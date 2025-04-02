@@ -9,20 +9,31 @@ class MongoDbDatabase extends Database {
   }
 
   async getById(Model, id,populate=null) {
+    var query = Model.findById(id);
+
     if(populate){
-      return await Model.findById(id).populate(populate);
+      if (Array.isArray(populate)) {
+        populate.forEach(pop => query = query.populate(pop));
+      } else {
+        query = query.populate(populate);
+      }
     }else{
-      return await Model.findById(id);
     }
+    return await query;
   }
 
   async get(Model, query = {}, projection = {}, options = {},populate=null) {
+    var query = Model.find(query, projection, options);
+    
     if(populate){
-      return await Model.find(query, projection, options).populate(populate);
-    }else{
-      return await Model.find(query, projection, options);
+      if (Array.isArray(populate)) {
+        populate.forEach(pop => query = query.populate(pop));
+      } else {
+        query = query.populate(populate);
+      }
     }
-
+    
+    return await query;
   }
 
   async update(Model, id, item) {
