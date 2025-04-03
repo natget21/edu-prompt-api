@@ -6,7 +6,9 @@ const OrdersSchema = new mongoose.Schema({
         required: true,
     },
     items: [{
-        type: mongoose.Schema.Types.ObjectId
+        _id: mongoose.Schema.Types.ObjectId,
+        type: { type: String, enum: ['product', 'prompt'] },
+        quantity: Number
     }],
     totalAmount: {
         type: Number,
@@ -18,6 +20,12 @@ const OrdersSchema = new mongoose.Schema({
         default: 'pending',
     }
 
-}, { timestamps: true,versionKey: false });
+}, { timestamps: true, versionKey: false });
 
+OrdersSchema.virtual('_items', {
+});
+
+OrdersSchema.set('toJSON', {
+    virtuals: true,
+});
 export const Orders = mongoose.model('Orders', OrdersSchema);
