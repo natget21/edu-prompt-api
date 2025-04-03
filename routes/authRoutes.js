@@ -1,13 +1,13 @@
 import express from 'express';
 import {tokenAuth,scopeAuth} from '../middleware/auth.js';
-import { registerUser, loginUser, getUserData, updateUserData,hostedLogin,getToken,logout } from '../handlers/authHandler.js';
+import { registerUser,  getUserWithMetaData, updateUserData,hostedLogin,getToken,logout, updateUserMetadata } from '../handlers/authHandler.js';
 
 const router = express.Router();
 
 router.post('/register', registerUser);
-router.post('/login', loginUser);
-router.get('/me', tokenAuth, getUserData);
-router.put('/update', tokenAuth, scopeAuth("read:current_user"), updateUserData);
+router.get('/me', tokenAuth, getUserWithMetaData);
+router.put('/update-user-data', tokenAuth,  updateUserData);
+router.put('/update-user-metadata', tokenAuth, updateUserMetadata);
 
 
 // backend login
