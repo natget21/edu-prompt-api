@@ -4,7 +4,12 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const tokenAuth = (req, res, next) => {
-  // next();
+  
+  // TODO: remove this when deploying to production
+  if(process.env.SKIP_AUTH == true) {
+    return next();
+  }
+  
   auth({
     audience: process.env.AUTH0_AUDIENCE,
     issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}/`,
@@ -16,7 +21,7 @@ const tokenAuth = (req, res, next) => {
         error: err.message,
       });
     }
-    
+
     next();
   });
 };
