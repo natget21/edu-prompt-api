@@ -33,7 +33,7 @@ export const registerUser = async (req, res) => {
 
 export const hostedLogin = async (req, res) => {
   const REDIRECT_URI = 'http://localhost:3000';
-  const authUrl = `https://${process.env.AUTH0_DOMAIN}/authorize?client_id=${process.env.AUTH0_CLIENT_ID}&audience=${process.env.AUTH0_AUDIENCE}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=openid profile email`;
+  const authUrl = `https://${process.env.AUTH0_DOMAIN}/authorize?client_id=${process.env.AUTH0_CLIENT_ID}&audience=${process.env.AUTH0_AUDIENCE}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=openid profile email read:current_user update:current_user_metadata`;
   res.redirect(authUrl);
 }
 
@@ -69,7 +69,7 @@ export const getUserData = async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    res.status(400).json({ error: 'Failed to get user data' });
+    res.status(400).json({ error: 'Failed to get user data', message: error.response?.data || error });
   }
 };
 
@@ -86,7 +86,7 @@ export const getUserWithMetaData = async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    res.status(400).json({ error: 'Failed to get user data' });
+    res.status(400).json({ error: 'Failed to get user data',message: error.response?.data || error });
   }
 };
 
@@ -129,7 +129,7 @@ export const updateUserMetadata = async (req, res) => {
 
     res.json(response.data);
   } catch (error) {
-    res.status(400).json({ error: 'Failed to update user metadata' });
+    res.status(400).json({ error: 'Failed to update user metadata',message: error.response?.data || error });
   }
 };
 

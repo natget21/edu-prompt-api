@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 
 import { initializeDB, shutdownDB } from './db/dbSelector.js';
+import { setupStorage } from './utils/fileUploadUtils.js';
 
 import authRoutes from './routes/authRoutes.js';
 import folderRoutes from './routes/folderRoutes.js';
@@ -12,6 +13,7 @@ import promptCategoryRoutes from './routes/promptCategoryRoutes.js';
 import productsRoutes from "./routes/productsRoutes.js";
 import aiRoutes from './routes/aiRoutes.js';
 import orderRoutes from './routes/ordersRoutes.js';
+import resourceRoutes from './routes/resourceRoutes.js';
 
 import {tokenAuth,scopeAuth} from './middleware/auth.js';
 import { errorHandler } from './middleware/errorHandler.js';
@@ -44,6 +46,7 @@ app.use('/api/prompt-categories', tokenAuth, promptCategoryRoutes);
 app.use('/api/ai', tokenAuth, aiRoutes);
 app.use("/api/products", tokenAuth, productsRoutes);
 app.use("/api/orders", tokenAuth, orderRoutes);
+app.use('/api/resources', tokenAuth, resourceRoutes);
 
 router.get('/api/ping', (req, res) => {
   res.status(200).json({ message: 'OK!' });
@@ -62,6 +65,9 @@ app.use(errorHandler);
 let server;
 
 initializeDB()
+  .then(() => {
+    setupStorage();
+  })
   .then(() => {
     server = app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })

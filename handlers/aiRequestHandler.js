@@ -11,7 +11,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
 
 export const sendPromptRequest = async (req, res) => {
-    
+  const { promptId, agent } = req.body;
 };
 
 export const sendRequest = async (req, res) => {

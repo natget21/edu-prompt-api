@@ -6,7 +6,7 @@ dotenv.config();
 const tokenAuth = (req, res, next) => {
   
   // TODO: remove this when deploying to production
-  if(process.env.SKIP_AUTH == true) {
+  if(process.env.SKIP_AUTH == "true") {
     return next();
   }
   

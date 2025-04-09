@@ -6,13 +6,13 @@ const collectionName = History
 
 
 export const getHistoryById = async (req, res) => {
-  const populate = [{ path: '_folder'}];
+  const populate = { path: '_folder'};
   const history = await getDBInstance().getById(collectionName, req.params.id,populate);
   res.json(history);
 };
 
 export const getAllHistory = async (req, res) => {
-  const populate = [{ path: '_folder'}];
+  const populate = { path: '_folder'};
   const history = await getDBInstance().get(collectionName,{},{},{},populate);
   res.json(history);
 };
@@ -24,8 +24,12 @@ export const getHistoryDetailById = async (req, res) => {
   const history = await getDBInstance().getById(collectionName, req.params.id,populate);
   const messages = await getDBInstance().get(Message,{"historyId":req.params.id});
 
-  var historyObj = history.toObject();  
-  historyObj.messages = messages;
+  var historyObj = {};
+  if(history!=null){
+    historyObj = history?.toObject();  
+    historyObj.messages = messages;
+  }
+  
   res.json(historyObj);
 };
 
