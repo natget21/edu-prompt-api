@@ -23,4 +23,8 @@ const ProductsSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+ProductsSchema.set('toJSON', {
+    versionKey: false
+});
+
 export const Products = mongoose.model('Products', ProductsSchema);
