@@ -1,8 +1,9 @@
 import express from 'express';
-import { getMessageById,getMessages, createMessage, updateMessage, deleteMessage } from '../handlers/messageHandler.js';
+import { getMessageById, getMessages, createMessage, updateMessage, deleteMessage, getSavedMessagesOfUser } from '../handlers/messageHandler.js';
 
 const router = express.Router();
 
+router.get('/getUserSavedMessage/:userId', getSavedMessagesOfUser);
 router.get('/:id', getMessageById);
 router.get('/', getMessages);
 router.post('/', createMessage);
